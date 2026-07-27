@@ -9,9 +9,32 @@ switching files:
 - Detecting the stack/versions/conventions of an unfamiliar repo before
   writing anything → follow `agents/fullstack-senior-dev.md` (or the
   lighter-weight `skills/stack-briefing/SKILL.md`).
+- Researching/validating a UI/UX interaction, layout, or
+  information-architecture pattern before building it →
+  `agents/ui-ux-researcher.md` — hands the recommendation to `frontend-dev`
+  (or `skills/html-css/SKILL.md`) next.
 - UI/component/page/client-state work → `agents/frontend-dev.md`.
+- Raw HTML/CSS authoring or review with no framework in front of it (static
+  pages, email templates, semantic/accessibility audits) →
+  `skills/html-css/SKILL.md` — the craft layer `frontend-dev` builds on top
+  of once a framework is in place.
+- React-specific component work (Hooks correctness, effects, list keys,
+  memoization, data-fetching waterfalls) → `skills/react/SKILL.md` —
+  `frontend-dev`'s React-specific expertise layer, when `package.json`
+  lists `react`/`react-dom`/`next` (or the work is `.jsx`/`.tsx`).
+- Utility-first Tailwind CSS styling → `skills/tailwind/SKILL.md` — layered
+  on `skills/html-css/SKILL.md`, applies in any framework, when
+  `package.json` lists `tailwindcss` (or a `tailwind.config`/`@theme` block
+  exists).
 - API routes/handlers/business logic → `agents/backend-dev.md`.
 - Schema/migrations/indices → `agents/database-schema-dev.md`.
+- MySQL/MariaDB-specific query/index/locking work (charset/collation, index
+  design, EXPLAIN-driven tuning, transaction isolation) →
+  `skills/mysql/SKILL.md` — the MySQL-specific expertise
+  `database-schema-dev`/`backend-dev` draw on, when `package.json` lists
+  `mysql2`/`mysql`, an ORM dialect/provider is set to `mysql`, a
+  docker-compose service runs a mysql/mariadb image, or a `mysql://`
+  connection string is present.
 - CI/CD, Docker, deploy config → `agents/devops-dev.md`.
 - Third-party API/SDK integration → `agents/api-integration-dev.md`.
 - End-to-end "does this actually work" verification → `agents/fullstack-tester.md`.

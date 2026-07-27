@@ -7,7 +7,9 @@ repository.
 
 A multi-tool agent+skill **plugin** ("Agent-P"): a Full Stack web dev
 department — subagent definitions (`agents/*.md`) in Claude Code's format,
-one skill (`skills/stack-briefing/SKILL.md`), and adapter files
+five skills (`skills/stack-briefing/SKILL.md`,
+`skills/html-css/SKILL.md`, `skills/react/SKILL.md`,
+`skills/tailwind/SKILL.md`, `skills/mysql/SKILL.md`), and adapter files
 (`AGENTS.md`, `.github/copilot-instructions.md`) so the same personas are
 usable from tools without a subagent mechanism. No application code, no
 build step, no test suite — editing this repo means editing the prose/YAML
@@ -46,7 +48,10 @@ literal trigger phrases (English and Thai). `tools` is a real permission
 boundary: `fullstack-head` (orchestrator) gets `Agent, Read, Grep, Glob,
 TodoWrite` — no `Edit`/`Write`, it delegates rather than implements;
 `fullstack-senior-dev` (read-only briefing) gets `Read, Grep, Glob, Bash` —
-no `Edit`/`Write` on purpose; four of the five implementers (`backend-dev`,
+no `Edit`/`Write` on purpose; `ui-ux-researcher` (read-only/advisory pattern
+research) gets `WebSearch, WebFetch, Read, Grep, Glob` — no
+`Edit`/`Write`/`Bash`, it hands a recommendation to `frontend-dev` rather
+than implementing; four of the five implementers (`backend-dev`,
 `database-schema-dev`, `devops-dev`, `api-integration-dev`) get
 `Edit`/`Write`/`Bash` scoped to what their domain actually needs;
 `frontend-dev` gets `Edit`/`Write` only — no `Bash`, since UI/component/page
@@ -59,6 +64,7 @@ CEO/router above it:
 
 ```
 fullstack-head ─┬─ fullstack-senior-dev  (briefs every implementer first)
+                 ├─ ui-ux-researcher
                  ├─ frontend-dev
                  ├─ backend-dev
                  ├─ database-schema-dev

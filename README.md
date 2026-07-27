@@ -4,20 +4,39 @@
 Claude Code, OpenAI Codex, GitHub Copilot, and any other tool that reads the
 [AGENTS.md](AGENTS.md) convention.
 
-One department head plus seven specialists, each scoped to a slice of the
-stack (frontend, backend, database schema, devops, third-party integration,
-e2e testing), each written to stay inside its lane and hand off an explicit
-contract to the specialist that owns the next slice — so a schema decision
-doesn't leak into UI code, and an API shape doesn't get invented twice.
+One department head plus eight specialists, each scoped to a slice of the
+stack (UI/UX pattern research, frontend, backend, database schema, devops,
+third-party integration, e2e testing), each written to stay inside its lane
+and hand off an explicit contract to the specialist that owns the next slice
+— so a schema decision doesn't leak into UI code, and an API shape doesn't
+get invented twice.
 
 ## What's inside
 
-- **`agents/`** — 8 Claude Code subagents: `fullstack-head` (routes/reviews),
-  `fullstack-senior-dev` (stack/version detection briefing), `frontend-dev`,
+- **`agents/`** — 9 Claude Code subagents: `fullstack-head` (routes/reviews),
+  `fullstack-senior-dev` (stack/version detection briefing),
+  `ui-ux-researcher` (UI/UX pattern research), `frontend-dev`,
   `backend-dev`, `database-schema-dev`, `devops-dev`, `api-integration-dev`,
   `fullstack-tester`.
 - **`skills/stack-briefing/`** — the stack-detection routine as a standalone
   skill, for running inline without subagent dispatch.
+- **`skills/html-css/`** — framework-agnostic semantic HTML & modern CSS
+  authoring/review (accessibility, responsive layout, CSS conventions), for
+  static pages/email templates/landing pages or auditing existing markup —
+  the craft layer `frontend-dev` builds framework-specific work on top of.
+- **`skills/react/`** — React-specific expertise (Rules of Hooks and
+  dependency arrays, effect misuse, list keys, memoization judgment,
+  data-fetching waterfalls), active when the project's stack is React —
+  layered on `frontend-dev` and `skills/html-css/`.
+- **`skills/tailwind/`** — utility-first Tailwind CSS authoring/review
+  (token scale over arbitrary values, responsive/state variants, class-
+  string maintainability), active when the project uses Tailwind — works
+  with any framework, layered on `skills/html-css/`.
+- **`skills/mysql/`** — MySQL/MariaDB-specific database expertise (data
+  types and charset/collation, index design and EXPLAIN-driven query
+  tuning, transaction isolation and locking), active when the project's
+  database is MySQL or MariaDB — layered under `database-schema-dev` and
+  `backend-dev`.
 - **`AGENTS.md`** — persona roster + routing table, for Codex/Cursor/Aider/
   Windsurf/any tool that reads a single root instructions file.
 - **`.github/copilot-instructions.md`** — the same routing, in GitHub
@@ -39,8 +58,9 @@ Or from a local checkout:
 /plugin install agent-p-fullstack@agent-p-fullstack
 ```
 
-This loads all 8 agents and the `stack-briefing` skill into any project you
-work on with Claude Code.
+This loads all 9 agents and the `stack-briefing`, `html-css`, `react`,
+`tailwind`, and `mysql` skills into any project you work on with Claude
+Code.
 
 ### OpenAI Codex (or Cursor, Aider, Windsurf, and other AGENTS.md-aware tools)
 
