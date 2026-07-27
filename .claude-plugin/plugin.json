@@ -1,0 +1,9 @@
+{
+  "name": "agent-p-fullstack",
+  "version": "1.0.0",
+  "description": "Agent-P: a Full Stack web dev department — 8 subagents (senior architect, frontend, backend, database schema, devops, third-party integration, e2e tester, and a department head that routes between them) plus a stack-detection skill.",
+  "author": {
+    "name": "LDKTC",
+    "email": "thanapatsinghanart@gmail.com"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "agent-p-fullstack",
+  "version": "1.0.0",
+  "description": "Self-hosted marketplace entry so this repo installs directly into Claude Code.",
+  "owner": {
+    "name": "LDKTC",
+    "email": "thanapatsinghanart@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "agent-p-fullstack",
+      "version": "1.0.0",
+      "source": "./"
+    }
+  ]
+}
