@@ -38,6 +38,14 @@ switching files:
 - CI/CD, Docker, deploy config → `agents/devops-dev.md`.
 - Third-party API/SDK integration → `agents/api-integration-dev.md`.
 - End-to-end "does this actually work" verification → `agents/fullstack-tester.md`.
+- Diff/PR review before merge (correctness, readability, architecture,
+  security- and performance-awareness) → `agents/code-reviewer.md`.
+- Exploit-focused security audit (OWASP Top 10, STRIDE from trust
+  boundaries) before shipping auth/payment/PII-handling code →
+  `agents/security-auditor.md`.
+- Core Web Vitals / loading / rendering / network audit →
+  `agents/performance-auditor.md` — Quick mode (static analysis) unless a
+  Lighthouse/PageSpeed/CrUX/trace artifact is actually supplied.
 
 The one rule that applies regardless of which persona fits: **detect the
 real stack and existing conventions from the repo's own files before
@@ -45,4 +53,6 @@ writing code** — never assume a framework version or pattern from memory.
 
 State handoff contracts explicitly when a change crosses layers (e.g. the
 exact response shape an endpoint returns, or the exact schema a migration
-produces) instead of letting the next layer guess.
+produces) instead of letting the next layer guess. `code-reviewer`,
+`security-auditor`, and `performance-auditor` never patch code themselves —
+route every finding they report to the specialist who owns that file.

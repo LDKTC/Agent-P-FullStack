@@ -55,7 +55,11 @@ than implementing; four of the five implementers (`backend-dev`,
 `database-schema-dev`, `devops-dev`, `api-integration-dev`) get
 `Edit`/`Write`/`Bash` scoped to what their domain actually needs;
 `frontend-dev` gets `Edit`/`Write` only — no `Bash`, since UI/component/page
-work doesn't need a shell.
+work doesn't need a shell. The three review/audit specialists
+(`code-reviewer`, `security-auditor`, `performance-auditor`) get
+`Read, Grep, Glob, Bash` — the same read-only shape as `fullstack-senior-dev`
+— since they report findings for another specialist to fix, never patch
+code themselves.
 
 ### Flat department, one head
 
@@ -70,7 +74,10 @@ fullstack-head ─┬─ fullstack-senior-dev  (briefs every implementer first)
                  ├─ database-schema-dev
                  ├─ devops-dev
                  ├─ api-integration-dev
-                 └─ fullstack-tester
+                 ├─ fullstack-tester
+                 ├─ code-reviewer          (reviews implementer output; no Edit/Write)
+                 ├─ security-auditor       (reviews implementer output; no Edit/Write)
+                 └─ performance-auditor    (reviews implementer output; no Edit/Write)
 ```
 
 Every agent's cross-references stay inside this list — none of them assume

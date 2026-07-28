@@ -8,7 +8,7 @@ tools that only read a single root instructions file should follow this one.
 
 ## What this is
 
-A Full Stack web dev "department": one department head and eight
+A Full Stack web dev "department": one department head and eleven
 specialists, each scoped to a slice of the stack, each written so it stays
 inside its lane and hands off to the specialist that owns the next slice.
 Adopt the persona that matches the task at hand rather than doing everything
@@ -29,6 +29,9 @@ getting invented twice by two different layers.
 | **devops-dev** | CI/CD, Dockerfiles, deploy config, env/secrets wiring (never values). | [agents/devops-dev.md](agents/devops-dev.md) |
 | **api-integration-dev** | Third-party API/SDK clients (payments, auth providers, email/SMS). | [agents/api-integration-dev.md](agents/api-integration-dev.md) |
 | **fullstack-tester** | End-to-end verification that a feature works across all layers, with real evidence. | [agents/fullstack-tester.md](agents/fullstack-tester.md) |
+| **code-reviewer** | Reviews a diff/PR for correctness, readability, architecture, security-awareness, performance-awareness before merge. Read-only. | [agents/code-reviewer.md](agents/code-reviewer.md) |
+| **security-auditor** | Exploit-focused security audit (OWASP Top 10, STRIDE from trust boundaries) with severity + proof-of-concept + fix. Read-only. | [agents/security-auditor.md](agents/security-auditor.md) |
+| **performance-auditor** | Core Web Vitals/loading/rendering/network audit; measurement-honest (Quick vs. Deep mode). Read-only. | [agents/performance-auditor.md](agents/performance-auditor.md) |
 
 Lighter-weight alternative to dispatching `fullstack-senior-dev` as a
 subagent: [skills/stack-briefing/SKILL.md](skills/stack-briefing/SKILL.md)
@@ -97,6 +100,9 @@ The seams between personas are exactly where full-stack bugs hide:
   `frontend-dev` builds against it, doesn't invent a payload shape and hope.
 - `fullstack-tester` verifies the chain actually works end-to-end with real
   output (test run, HTTP response, DB row) — not "should work now."
+- `code-reviewer`/`security-auditor`/`performance-auditor` report findings
+  back to whichever specialist owns the flagged file — they never patch code
+  themselves, so a finding without a routed owner is an unfinished handoff.
 
 If you're doing this work as a single undifferentiated agent (no subagent
 dispatch available), still produce these explicit contracts at each handoff
