@@ -1,7 +1,7 @@
 {
   "name": "agent-p-fullstack",
-  "version": "1.1.0",
-  "description": "Agent-P: a Full Stack web dev department — 12 subagents (senior architect, UI/UX researcher, frontend, backend, database schema, devops, third-party integration, e2e tester, code reviewer, security auditor, performance auditor, and a department head that routes between them) plus five skills (stack detection, HTML/CSS craft, React expertise, Tailwind CSS, MySQL expertise).",
+  "version": "1.2.0",
+  "description": "Agent-P: a Full Stack web dev department — 14 subagents (senior architect, UI/UX researcher, frontend, backend, database schema, devops, third-party integration, e2e tester, code reviewer, security auditor, performance auditor, debug specialist, documentation architect, and a department head that routes between them) plus five skills (stack detection, HTML/CSS craft, React expertise, Tailwind CSS, MySQL expertise).",
   "author": {
     "name": "LDKTC",
     "email": "thanapatsinghanart@gmail.com"

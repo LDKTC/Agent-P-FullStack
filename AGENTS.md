@@ -8,7 +8,7 @@ tools that only read a single root instructions file should follow this one.
 
 ## What this is
 
-A Full Stack web dev "department": one department head and eleven
+A Full Stack web dev "department": one department head and thirteen
 specialists, each scoped to a slice of the stack, each written so it stays
 inside its lane and hands off to the specialist that owns the next slice.
 Adopt the persona that matches the task at hand rather than doing everything
@@ -32,6 +32,8 @@ getting invented twice by two different layers.
 | **code-reviewer** | Reviews a diff/PR for correctness, readability, architecture, security-awareness, performance-awareness before merge. Read-only. | [agents/code-reviewer.md](agents/code-reviewer.md) |
 | **security-auditor** | Exploit-focused security audit (OWASP Top 10, STRIDE from trust boundaries) with severity + proof-of-concept + fix. Read-only. | [agents/security-auditor.md](agents/security-auditor.md) |
 | **performance-auditor** | Core Web Vitals/loading/rendering/network audit; measurement-honest (Quick vs. Deep mode). Read-only. | [agents/performance-auditor.md](agents/performance-auditor.md) |
+| **debug-specialist** | Reproduces, root-causes, and fixes a specific reported bug/error/crash — the one worker allowed to cross lanes for its own fix. | [agents/debug-specialist.md](agents/debug-specialist.md) |
+| **documentation-architect** | Writes/updates persisted docs (README, architecture notes, API reference) grounded in the actual code and other workers' reports. | [agents/documentation-architect.md](agents/documentation-architect.md) |
 
 Lighter-weight alternative to dispatching `fullstack-senior-dev` as a
 subagent: [skills/stack-briefing/SKILL.md](skills/stack-briefing/SKILL.md)
@@ -103,6 +105,10 @@ The seams between personas are exactly where full-stack bugs hide:
 - `code-reviewer`/`security-auditor`/`performance-auditor` report findings
   back to whichever specialist owns the flagged file — they never patch code
   themselves, so a finding without a routed owner is an unfinished handoff.
+- `debug-specialist` fixes the root cause of the specific bug it's given,
+  but still hands off a schema/third-party/infra root cause to
+  `database-schema-dev`/`api-integration-dev`/`devops-dev` instead of
+  reaching into their files itself.
 
 If you're doing this work as a single undifferentiated agent (no subagent
 dispatch available), still produce these explicit contracts at each handoff

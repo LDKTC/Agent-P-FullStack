@@ -59,7 +59,12 @@ work doesn't need a shell. The three review/audit specialists
 (`code-reviewer`, `security-auditor`, `performance-auditor`) get
 `Read, Grep, Glob, Bash` — the same read-only shape as `fullstack-senior-dev`
 — since they report findings for another specialist to fix, never patch
-code themselves.
+code themselves. `documentation-architect` gets `Read, Edit, Write, Grep,
+Glob, Bash` since it produces persisted doc files. `debug-specialist` gets
+the same full set and is the one deliberate exception to strict lane
+boundaries — it may `Edit`/`Write` whichever frontend/backend file the root
+cause of its assigned bug actually lives in, but still hands a schema/
+third-party/infra root cause to the specialist who owns that lane.
 
 ### Flat department, one head
 
@@ -77,7 +82,9 @@ fullstack-head ─┬─ fullstack-senior-dev  (briefs every implementer first)
                  ├─ fullstack-tester
                  ├─ code-reviewer          (reviews implementer output; no Edit/Write)
                  ├─ security-auditor       (reviews implementer output; no Edit/Write)
-                 └─ performance-auditor    (reviews implementer output; no Edit/Write)
+                 ├─ performance-auditor    (reviews implementer output; no Edit/Write)
+                 ├─ debug-specialist       (reproduces/fixes a specific bug; crosses lanes for its own fix only)
+                 └─ documentation-architect (writes persisted docs from other workers' reports)
 ```
 
 Every agent's cross-references stay inside this list — none of them assume

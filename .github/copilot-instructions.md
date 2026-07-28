@@ -46,6 +46,10 @@ switching files:
 - Core Web Vitals / loading / rendering / network audit →
   `agents/performance-auditor.md` — Quick mode (static analysis) unless a
   Lighthouse/PageSpeed/CrUX/trace artifact is actually supplied.
+- Investigate/fix a specific reported bug, error, or crash (reproduce first,
+  root-cause, minimal fix, re-verify) → `agents/debug-specialist.md`.
+- Write/update persisted docs (README, architecture notes, API reference) →
+  `agents/documentation-architect.md`.
 
 The one rule that applies regardless of which persona fits: **detect the
 real stack and existing conventions from the repo's own files before
@@ -56,3 +60,6 @@ exact response shape an endpoint returns, or the exact schema a migration
 produces) instead of letting the next layer guess. `code-reviewer`,
 `security-auditor`, and `performance-auditor` never patch code themselves —
 route every finding they report to the specialist who owns that file.
+`debug-specialist` is the one persona allowed to cross lanes for the fix
+it's actually diagnosing, but still hands a schema/third-party/infra root
+cause to the specialist who owns that lane rather than editing it directly.

@@ -4,23 +4,24 @@
 Claude Code, OpenAI Codex, GitHub Copilot, and any other tool that reads the
 [AGENTS.md](AGENTS.md) convention.
 
-One department head plus eleven specialists, each scoped to a slice of the
+One department head plus thirteen specialists, each scoped to a slice of the
 stack (UI/UX pattern research, frontend, backend, database schema, devops,
 third-party integration, e2e testing, code review, security auditing,
-performance auditing), each written to stay inside its lane and hand off an
-explicit contract to the specialist that owns the next slice — so a schema
-decision doesn't leak into UI code, and an API shape doesn't get invented
-twice.
+performance auditing, debugging, documentation), each written to stay inside
+its lane and hand off an explicit contract to the specialist that owns the
+next slice — so a schema decision doesn't leak into UI code, and an API
+shape doesn't get invented twice.
 
 ## What's inside
 
-- **`agents/`** — 12 Claude Code subagents: `fullstack-head` (routes/reviews),
+- **`agents/`** — 14 Claude Code subagents: `fullstack-head` (routes/reviews),
   `fullstack-senior-dev` (stack/version detection briefing),
   `ui-ux-researcher` (UI/UX pattern research), `frontend-dev`,
   `backend-dev`, `database-schema-dev`, `devops-dev`, `api-integration-dev`,
   `fullstack-tester`, `code-reviewer` (diff/PR review), `security-auditor`
   (exploit-focused OWASP audit), `performance-auditor` (Core Web Vitals
-  audit, measurement-honest).
+  audit, measurement-honest), `debug-specialist` (reproduce/root-cause/fix a
+  reported bug), `documentation-architect` (README/architecture/API docs).
 - **`skills/stack-briefing/`** — the stack-detection routine as a standalone
   skill, for running inline without subagent dispatch.
 - **`skills/html-css/`** — framework-agnostic semantic HTML & modern CSS
@@ -61,7 +62,7 @@ Or from a local checkout:
 /plugin install agent-p-fullstack@agent-p-fullstack
 ```
 
-This loads all 12 agents and the `stack-briefing`, `html-css`, `react`,
+This loads all 14 agents and the `stack-briefing`, `html-css`, `react`,
 `tailwind`, and `mysql` skills into any project you work on with Claude
 Code.
 
