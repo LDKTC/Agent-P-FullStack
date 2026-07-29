@@ -35,9 +35,21 @@ switching files:
   `mysql2`/`mysql`, an ORM dialect/provider is set to `mysql`, a
   docker-compose service runs a mysql/mariadb image, or a `mysql://`
   connection string is present.
+- Deciding whether to extract a shared abstraction, or adding to/reordering
+  a middleware, guard, interceptor, or error-handler chain →
+  `skills/dry-and-cor/SKILL.md`. DRY is about knowledge, not characters
+  (blocks that change for different reasons aren't duplication, and
+  server-side validation is never redundant with the client's); CoR is one
+  decision per handler, order as a contract, explicit termination, no silent
+  fall-through.
 - CI/CD, Docker, deploy config → `agents/devops-dev.md`.
 - Third-party API/SDK integration → `agents/api-integration-dev.md`.
 - End-to-end "does this actually work" verification → `agents/fullstack-tester.md`.
+- Verifying a change against the running app — start the service, send one
+  request or drive one browser task, read the HTTP response, the server/
+  console log, and the database delta together as one verdict →
+  `skills/dev-testing/SKILL.md`. Applies during implementation, not only at
+  the end.
 - Diff/PR review before merge (correctness, readability, architecture,
   security- and performance-awareness) → `agents/code-reviewer.md`.
 - Exploit-focused security audit (OWASP Top 10, STRIDE from trust
@@ -51,9 +63,20 @@ switching files:
 - Write/update persisted docs (README, architecture notes, API reference) →
   `agents/documentation-architect.md`.
 
-The one rule that applies regardless of which persona fits: **detect the
-real stack and existing conventions from the repo's own files before
-writing code** — never assume a framework version or pattern from memory.
+Two rules apply regardless of which persona fits. **Detect the real stack
+and existing conventions from the repo's own files before writing code** —
+never assume a framework version or pattern from memory. And **run it before
+calling it done** — a 2xx that persisted no row, or a page that rendered
+with an uncaught console error, is a failure that only checking response,
+log, and database delta together will catch.
+
+Route through the list above as a chain: take the **most specific** matching
+persona rather than the first plausible one (a reported bug is
+`debug-specialist` work even when the fix lands in a `backend-dev` file),
+adopt one persona per unit of work rather than half of two, escalate onward
+when a persona surfaces something outside its depth, and say plainly when a
+task no persona covers is out of scope instead of absorbing it into the
+nearest one.
 
 State handoff contracts explicitly when a change crosses layers (e.g. the
 exact response shape an endpoint returns, or the exact schema a migration

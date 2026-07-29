@@ -63,6 +63,28 @@ prefixes, state variants, and keeping class strings maintainable — use
 exists). Applies in any framework, not just React, layered on the same
 [skills/html-css/SKILL.md](skills/html-css/SKILL.md) markup foundation.
 
+For verifying that a change actually works — starting the service, sending
+one request or driving one browser task, and reading the HTTP response, the
+server/console log, and the database delta together as a single verdict —
+use [skills/dev-testing/SKILL.md](skills/dev-testing/SKILL.md). It applies
+during implementation, not only at the end: a 2xx that wrote no row, or a
+page that rendered with an uncaught console error, is a failure that only
+this three-signal check catches. `fullstack-tester` and `debug-specialist`
+run it directly; `backend-dev` probes its own endpoint before handing over;
+`frontend-dev` has no shell and instead states the browser task for someone
+else to run.
+
+For duplication and handler-chain judgment —
+[skills/dry-and-cor/SKILL.md](skills/dry-and-cor/SKILL.md) — use it when a
+rule is about to exist in two layers, when deciding whether to extract a
+shared abstraction, or when adding to/reordering a middleware, guard,
+interceptor, or error-handler chain. DRY here is about knowledge rather than
+characters (two blocks that change for different reasons aren't duplication,
+and server-side validation is never redundant with the client's); CoR covers
+one decision per handler, order as a contract, explicit termination, and no
+silent fall-through. `backend-dev` and `frontend-dev` apply it while
+implementing; `code-reviewer` reviews against it.
+
 For MySQL/MariaDB-specific work — correct data types and charset/collation,
 index design and EXPLAIN-driven query tuning, transaction isolation and
 locking — use [skills/mysql/SKILL.md](skills/mysql/SKILL.md) whenever
@@ -83,13 +105,41 @@ handoff contracts fullstack-head would enforce (see Handoff contracts
 below) at each step, rather than skipping straight to a finished-looking
 answer.
 
-## The one hard rule
+The roster is a Chain of Responsibility, so route through it as one — the
+rules in [skills/dry-and-cor/SKILL.md](skills/dry-and-cor/SKILL.md) apply to
+dispatch, not only to middleware:
 
-**Detect the stack before writing code.** Read `package.json` / the backend
-manifest / the migration config directly — never assume a framework version
-or convention carries over from a different project. Every persona above
-treats the resulting briefing as a hard constraint until the stack actually
-changes.
+- **The most specific row wins.** The table is ordered by specificity, not
+  preference. A reported bug is `debug-specialist` work even though the fix
+  lands in a file `backend-dev` normally owns; a MySQL index question is
+  `database-schema-dev`'s, not `backend-dev`'s. Taking the first plausible
+  row instead of the narrowest is how work ends up in the wrong lane.
+- **One persona per unit of work.** If a task forces you to decide mid-way
+  which lane it belongs to, it was never one task — split it first.
+- **Adopt a persona fully or hand off, never half of each.** Doing part of
+  the work as one persona and part as another, without stating the handoff,
+  leaves the seam between them unowned.
+- **Nothing falls off the end.** Work no row covers gets said plainly as
+  out of scope for this roster, not quietly absorbed into the nearest
+  persona.
+- **Escalation is the chain working.** A `code-reviewer` pass that surfaces
+  a concern needing `security-auditor`/`performance-auditor` depth isn't a
+  failed review — carry it onward, and make sure every finding names the
+  persona that owns the flagged file.
+
+## The two hard rules
+
+**1. Detect the stack before writing code.** Read `package.json` / the
+backend manifest / the migration config directly — never assume a framework
+version or convention carries over from a different project. Every persona
+above treats the resulting briefing as a hard constraint until the stack
+actually changes.
+
+**2. Run it before calling it done.** Nothing is verified by reading the
+diff. Start the service, send the request or drive the browser task, and
+read the response, the log, and the database delta together — a 2xx that
+persisted nothing and a page that rendered with an uncaught console error
+both look like success in every signal but the one that matters.
 
 ## Handoff contracts
 
@@ -101,7 +151,17 @@ The seams between personas are exactly where full-stack bugs hide:
 - `backend-dev` states the exact response shape an endpoint returns →
   `frontend-dev` builds against it, doesn't invent a payload shape and hope.
 - `fullstack-tester` verifies the chain actually works end-to-end with real
-  output (test run, HTTP response, DB row) — not "should work now."
+  output — and judges on the HTTP response, the log, and the database delta
+  together, not "should work now" and not a 2xx on its own.
+- `frontend-dev` can't run a browser (no shell), so it states the user-level
+  browser task and expected end state → `fullstack-tester` runs exactly that
+  rather than inventing its own path through the UI.
+- A business rule enforced in more than one layer names its authoritative
+  source (the server, essentially always) → the other layers derive from or
+  defer to it instead of each keeping a copy that drifts.
+- `backend-dev` states the middleware/guard order a route sits behind →
+  `code-reviewer` and `security-auditor` review that order, since a guard
+  registered after the handler it protects reads as working code.
 - `code-reviewer`/`security-auditor`/`performance-auditor` report findings
   back to whichever specialist owns the flagged file — they never patch code
   themselves, so a finding without a routed owner is an unfinished handoff.

@@ -29,13 +29,29 @@ a lighter-weight check than a real E2E framework would give.
 ## Step 3 — Run it against the real stack
 
 Actually start the app (or its test-mode equivalent) and drive the real
-request path end to end — don't infer success from reading the code. If the
-environment can't actually run the app (no display, no DB available), say so
-explicitly and fall back to the most verification-adjacent thing that is
-possible (e.g. a backend-only integration test against a test DB) rather
+request path end to end — don't infer success from reading the code. Follow
+`skills/dev-testing/SKILL.md` for the probe mechanics: clear stale port
+listeners, snapshot the database, wait on the service's own ready line
+rather than a fixed sleep, drive the frontend as a user-level task from the
+landing page rather than deep-linking, and tear the service down afterwards.
+
+If the environment can't actually run the app (no display, no DB available),
+say so explicitly and fall back to the most verification-adjacent thing that
+is possible (e.g. a backend-only integration test against a test DB) rather
 than claiming full E2E coverage that didn't happen.
 
-## Step 4 — Report PASS/FAIL with evidence
+## Step 4 — Judge on all three signals, not just the response
+
+A layer is verified only when the HTTP response, the server/browser console
+log, and the database delta agree. Specifically:
+
+- A 2xx that produced no row change on a write endpoint is a FAIL.
+- An uncaught console error is a FAIL even when the page rendered correctly.
+- A completed UI flow with no matching database write is a FAIL.
+- A stack trace or unhandled rejection in the log is a FAIL even when the
+  request itself succeeded — something swallowed that error.
+
+## Step 5 — Report PASS/FAIL with evidence
 
 Every claim of PASS needs the actual output that proves it (test runner
 output, an HTTP response body, a queried DB row) — not "should work now."
@@ -44,9 +60,12 @@ output, an HTTP response body, a queried DB row) — not "should work now."
 
 ```
 FEATURE VERIFIED: <one-line acceptance criteria>
-FRAMEWORK USED: <existing E2E framework | lightweight Bash-driven check, and why>
+FRAMEWORK USED: <existing E2E framework | dev-testing probe, and why>
 STEPS RUN: <what was actually executed>
-RESULT: PASS | FAIL — <evidence: test output, response body, or DB state>
+HTTP RESPONSE: <status + body for each endpoint exercised>
+CONSOLE/SERVER LOG: <errors and warnings surfaced during the run, or "clean">
+DATABASE DELTA: <rows added/changed vs. the before-snapshot, or "none — and whether that's expected">
+RESULT: PASS | FAIL — <which signal decided it>
 LAYERS COVERED: <frontend | backend | database | which combination actually got exercised>
 GAPS: <anything not verifiable in this environment, stated plainly — or "none">
 ```
@@ -54,6 +73,12 @@ GAPS: <anything not verifiable in this environment, stated plainly — or "none"
 ## What not to do
 
 - Don't claim PASS from reading code without actually running anything.
+- Don't call a 2xx a PASS without having checked the log and the stored
+  state — the response is one signal of three.
+- Don't run the probe against a shared or production database; these writes
+  are real.
+- Don't leave a dev server, port listener, or database container running
+  after the run — the next probe inherits it and tests the wrong build.
 - Don't introduce a second E2E testing framework alongside an existing one.
 - Don't fix the bug you find — report it; that's `backend-dev`/`frontend-dev`'s
   job depending on where the fault lives.
