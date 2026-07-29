@@ -7,14 +7,15 @@ repository.
 
 A multi-tool agent+skill **plugin** ("Agent-P"): a Full Stack web dev
 department — subagent definitions (`agents/*.md`) in Claude Code's format,
-seven skills (`skills/stack-briefing/SKILL.md`,
-`skills/dev-testing/SKILL.md`, `skills/dry-and-cor/SKILL.md`,
-`skills/html-css/SKILL.md`, `skills/react/SKILL.md`,
-`skills/tailwind/SKILL.md`, `skills/mysql/SKILL.md`), and adapter files
-(`AGENTS.md`, `.github/copilot-instructions.md`) so the same personas are
-usable from tools without a subagent mechanism. No application code, no
-build step, no test suite — editing this repo means editing the prose/YAML
-that defines agent behavior.
+seventeen skills under `skills/` (three cross-cutting:
+`stack-briefing`, `dev-testing`, `dry-and-cor`; and fourteen
+technology-specific: `html-css`, `react`, `tailwind`, `typescript`,
+`nodejs`, `electron`, `flutter`, `mysql`, `postgres`, `sqlite`, `supabase`,
+`turso`, `firebase`, `google-auth`), and adapter files (`AGENTS.md`,
+`.github/copilot-instructions.md`) so the same personas are usable from
+tools without a subagent mechanism. No application code, no build step, no
+test suite — editing this repo means editing the prose/YAML that defines
+agent behavior.
 
 ## Commands
 
@@ -149,6 +150,38 @@ across files. `fullstack-head` points at it for dispatch the same way
 owner per unit, terminate-or-pass-never-both, nothing falls off the end,
 record which link took it. Keep both applications in the skill rather than
 restating either in an agent.
+
+### Technology skills layer instead of restating each other
+
+The fourteen technology skills are deliberately stacked, and each one names
+the layer below it rather than repeating it. Breaking that is how the repo
+grows contradictory copies of the same rule:
+
+```
+html-css ── react ── tailwind        (browser UI; typescript cuts across all)
+nodejs ──── electron                 (Electron's main process is Node)
+sqlite ──── turso                    (Turso is networked libSQL)
+postgres ── supabase                 (Supabase is Postgres + RLS/auth/keys)
+mysql                                (standalone engine skill)
+firebase, google-auth                (service/protocol skills)
+flutter                              (separate rendering model — see below)
+```
+
+Two rules keep this coherent. First, a skill covers only its **delta** over
+the layer beneath: `turso` doesn't restate SQLite's type affinity or index
+rules, `supabase` doesn't restate Postgres's locking or `EXPLAIN` rules, and
+`electron` doesn't restate the renderer's UI rules. If a rule is true of the
+base technology, it belongs in the base skill. Second, `flutter` is the one
+that explicitly **breaks** inheritance — it says outright that
+`html-css`/`react`/`tailwind` do not apply, because there is no DOM or CSS.
+Don't "fix" that by cross-linking them.
+
+`supabase`, `firebase`, and `google-auth` each carry a trust-boundary
+statement that reads like duplication but isn't: the boundary is in a
+different place in each (a `service_role` key, a service account plus
+Security Rules, an ID token's `aud` claim). Keep them stated per skill —
+collapsing them into one generic "don't leak secrets" note loses the
+specific check that catches the bug.
 
 ### Repo/marketplace relationship
 
