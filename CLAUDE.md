@@ -141,6 +141,15 @@ that merely looks alike but changes for different reasons is not
 duplication. Both exist to stop an over-eager DRY pass from creating a
 security hole or a bad coupling.
 
+The CoR half is stated twice over in that one file — once for request
+pipelines (middleware/guards/interceptors) and once for routing work across
+the roster — because they're the same five rules and drift apart if split
+across files. `fullstack-head` points at it for dispatch the same way
+`backend-dev` points at it for middleware: most specific handler wins, one
+owner per unit, terminate-or-pass-never-both, nothing falls off the end,
+record which link took it. Keep both applications in the skill rather than
+restating either in an agent.
+
 ### Repo/marketplace relationship
 
 `.claude-plugin/plugin.json` is the plugin manifest; `.claude-plugin/

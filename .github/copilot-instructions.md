@@ -70,6 +70,14 @@ calling it done** — a 2xx that persisted no row, or a page that rendered
 with an uncaught console error, is a failure that only checking response,
 log, and database delta together will catch.
 
+Route through the list above as a chain: take the **most specific** matching
+persona rather than the first plausible one (a reported bug is
+`debug-specialist` work even when the fix lands in a `backend-dev` file),
+adopt one persona per unit of work rather than half of two, escalate onward
+when a persona surfaces something outside its depth, and say plainly when a
+task no persona covers is out of scope instead of absorbing it into the
+nearest one.
+
 State handoff contracts explicitly when a change crosses layers (e.g. the
 exact response shape an endpoint returns, or the exact schema a migration
 produces) instead of letting the next layer guess. `code-reviewer`,

@@ -52,7 +52,11 @@ shape doesn't get invented twice.
   two functions. **Chain of Responsibility** for the middleware/guard/
   interceptor/error pipelines every web stack already has: one decision per
   handler, order as a contract, terminate-or-pass-never-both, and no request
-  falling off the end into a silent success.
+  falling off the end into a silent success. The same five rules are then
+  applied to *routing work* across the roster — most specific persona wins,
+  one owner per unit, escalation is the chain working, and a task no persona
+  covers gets said out loud rather than absorbed — which is how
+  `fullstack-head` dispatches.
 - **`skills/mysql/`** — MySQL/MariaDB-specific database expertise (data
   types and charset/collation, index design and EXPLAIN-driven query
   tuning, transaction isolation and locking), active when the project's

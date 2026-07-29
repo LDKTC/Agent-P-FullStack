@@ -1,6 +1,6 @@
 ---
 name: dry-and-cor
-description: Two structural rules for full-stack code — DRY (one piece of knowledge lives in one place, and the false-DRY traps specific to a client/server split) and Chain of Responsibility (middleware, guards, interceptors, and error-handler pipelines — one decision per handler, order as a contract, explicit termination). Use when writing or reviewing code that duplicates a rule across layers, when adding to or reordering a middleware/guard chain, or when deciding whether to extract a shared abstraction.
+description: Two structural rules for full-stack code — DRY (one piece of knowledge lives in one place, and the false-DRY traps specific to a client/server split) and Chain of Responsibility (middleware, guards, interceptors, and error-handler pipelines — one decision per handler, order as a contract, explicit termination — applied both to request pipelines and to routing work across a roster of specialists). Use when writing or reviewing code that duplicates a rule across layers, when adding to or reordering a middleware/guard chain, when deciding whether to extract a shared abstraction, or when dispatching/routing a task to the persona that owns it.
 ---
 
 # DRY and Chain of Responsibility
@@ -122,6 +122,29 @@ A fixed two-branch decision is an `if`, not a pipeline. Building a chain
 abstraction for three conditionals adds indirection with no payoff — the
 pattern earns its cost when handlers are genuinely independent, reorderable,
 and expected to grow in number.
+
+### The same rules apply to routing work, not just requests
+
+A roster of specialists is a chain too, and the failure modes rhyme. When
+dispatching work — whether to subagents or to personas you adopt in sequence
+— the rules above translate directly:
+
+- **Most specific handler wins.** Passing work to the first plausible owner
+  rather than the narrowest one is the routing equivalent of a middleware
+  that catches too much.
+- **One owner per unit of work.** Work that forces its handler to decide
+  which lane it belongs to was routed compound; split it first.
+- **Terminate or pass on, never both.** A handler that does part of the work
+  *and* delegates the rest leaves the middle unowned — the same defect as
+  responding and calling the next link.
+- **Nothing falls off the end.** Work no handler covers gets reported as
+  unroutable, loudly. Quietly absorbing it is the silent 200 of
+  orchestration.
+- **Record which handler took it**, for the same reason a chain logs which
+  link terminated it: the flow is no longer readable from any single place.
+
+Escalation — a handler declining and passing along what it isn't scoped to
+decide — is the chain working, not a failed route.
 
 ## Review checklist
 

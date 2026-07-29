@@ -105,6 +105,28 @@ handoff contracts fullstack-head would enforce (see Handoff contracts
 below) at each step, rather than skipping straight to a finished-looking
 answer.
 
+The roster is a Chain of Responsibility, so route through it as one — the
+rules in [skills/dry-and-cor/SKILL.md](skills/dry-and-cor/SKILL.md) apply to
+dispatch, not only to middleware:
+
+- **The most specific row wins.** The table is ordered by specificity, not
+  preference. A reported bug is `debug-specialist` work even though the fix
+  lands in a file `backend-dev` normally owns; a MySQL index question is
+  `database-schema-dev`'s, not `backend-dev`'s. Taking the first plausible
+  row instead of the narrowest is how work ends up in the wrong lane.
+- **One persona per unit of work.** If a task forces you to decide mid-way
+  which lane it belongs to, it was never one task — split it first.
+- **Adopt a persona fully or hand off, never half of each.** Doing part of
+  the work as one persona and part as another, without stating the handoff,
+  leaves the seam between them unowned.
+- **Nothing falls off the end.** Work no row covers gets said plainly as
+  out of scope for this roster, not quietly absorbed into the nearest
+  persona.
+- **Escalation is the chain working.** A `code-reviewer` pass that surfaces
+  a concern needing `security-auditor`/`performance-auditor` depth isn't a
+  failed review — carry it onward, and make sure every finding names the
+  persona that owns the flagged file.
+
 ## The two hard rules
 
 **1. Detect the stack before writing code.** Read `package.json` / the

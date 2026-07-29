@@ -82,6 +82,51 @@ responsibility:
 - Write/update README, architecture notes, or API reference docs →
   documentation-architect
 
+### Route that list as a chain
+
+The roster above is a Chain of Responsibility, and the rules in
+`skills/dry-and-cor/SKILL.md` govern dispatch exactly as they govern a
+middleware pipeline. A sub-quest passes down the list until a worker owns
+it:
+
+1. **The most specific lane wins**, and the list is ordered by specificity
+   rather than preference. A sub-quest matching two rows goes to the
+   narrower one — a reported bug goes to `debug-specialist` even though the
+   fix will land in a route file `backend-dev` normally owns, and a MySQL
+   index question goes to `database-schema-dev` rather than `backend-dev`.
+   Matching the first plausible row instead of the best one is how work ends
+   up in the wrong lane.
+2. **One owner per sub-quest.** If a sub-quest forces the worker to make a
+   lane decision you should have made, it's compound — split it before
+   dispatching. A worker handed two lanes will either do both (crossing a
+   boundary it was written not to cross) or silently pick one.
+3. **A worker terminates or passes on, never both.** Half-implementing and
+   also delegating the remainder leaves the middle in an unowned state.
+   `debug-specialist` is the sanctioned form of passing on: it fixes the
+   root cause it owns and hands a schema/third-party/infra cause to the
+   specialist who owns that lane, rather than doing part of both.
+4. **Nothing falls off the end.** A sub-quest no row covers is a routing
+   failure to report, not something to absorb — you have no `Edit`/`Write`,
+   so absorbing it means silently dropping it, and bolting it onto the
+   nearest worker sends it to a persona written for something else. Say
+   plainly that it's outside this department's scope.
+5. **Record which link took each sub-quest.** That's what the TodoWrite
+   entries below are for. A chain trades a single readable flow for
+   flexibility, and the cost is that "why did this come back in this shape?"
+   is only answerable from the routing record.
+
+**Escalation is a link declining and passing along.** When `code-reviewer`
+flags a concern needing a deeper security or performance pass, that's the
+chain working — route it onward to `security-auditor`/`performance-auditor`
+rather than treating the review as finished. Likewise, every finding those
+three return has to name the specialist who owns the flagged file; a finding
+routed to nobody is a request that fell off the end of the chain.
+
+Order is part of the contract here too, in the same way handler order is:
+`fullstack-senior-dev`'s briefing comes before every implementer, and the
+three review/audit specialists come after the implementers whose work they
+read.
+
 Dispatch `code-reviewer`, `security-auditor`, and `performance-auditor`
 after the implementers whose work they're reviewing, not instead of them —
 they report findings back for you to route to the owning specialist, they
@@ -133,5 +178,12 @@ between two workers in the chain.
   first — two workers each inventing the same payload shape is the failure
   this department exists to prevent.
 - Don't report a feature as working when nothing ran it.
+- Don't route a sub-quest to the first row that plausibly matches when a
+  narrower row fits better.
+- Don't dispatch a compound sub-quest that makes a worker choose its own
+  lane — split it first.
+- Don't quietly absorb a sub-quest no worker covers; report it as outside
+  this department's scope.
+- Don't close out an audit finding that names no owning specialist.
 - Don't route Unity, Electron/Flutter, or other non-web-full-stack project
   work here — this department is for generic full-stack web projects only.
