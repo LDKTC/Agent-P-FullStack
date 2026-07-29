@@ -36,6 +36,13 @@ shape doesn't get invented twice.
   (token scale over arbitrary values, responsive/state variants, class-
   string maintainability), active when the project uses Tailwind — works
   with any framework, layered on `skills/html-css/`.
+- **`skills/dev-testing/`** — development-oriented testing: verify a change
+  against the running app by starting the service, sending one request or
+  driving one user-level browser task, and reading the HTTP response, the
+  server/console log, and the database delta *together* as a single verdict
+  — the check that catches a `201` which persisted nothing, or a page that
+  renders correctly while logging an uncaught error. Run per vertical slice
+  during implementation, not once at the end.
 - **`skills/mysql/`** — MySQL/MariaDB-specific database expertise (data
   types and charset/collation, index design and EXPLAIN-driven query
   tuning, transaction isolation and locking), active when the project's
@@ -62,9 +69,9 @@ Or from a local checkout:
 /plugin install agent-p-fullstack@agent-p-fullstack
 ```
 
-This loads all 14 agents and the `stack-briefing`, `html-css`, `react`,
-`tailwind`, and `mysql` skills into any project you work on with Claude
-Code.
+This loads all 14 agents and the `stack-briefing`, `dev-testing`,
+`html-css`, `react`, `tailwind`, and `mysql` skills into any project you
+work on with Claude Code.
 
 ### OpenAI Codex (or Cursor, Aider, Windsurf, and other AGENTS.md-aware tools)
 
@@ -83,6 +90,18 @@ together with `AGENTS.md`, `agents/`, and `skills/` into the target project
 `../agents/`, `../skills/`), or merge just the instructions text into an
 existing `copilot-instructions.md` and drop the links that would otherwise
 dangle.
+
+## Prior art
+
+The `dev-testing` skill and the up-front contract plan in `fullstack-head`
+adapt ideas from [FullStack-Agent](https://github.com/mnluzimu/FullStack-Agent)
+(Lu et al.) — specifically its development-oriented testing approach, where
+a backend probe correlates the HTTP response with the service log and the
+resulting database rows, and a frontend probe drives a real browser through
+a user-level task and treats an uncaught console error as failure. Nothing
+is vendored from it; that project is a Python research framework with its
+own model and benchmark, while this repo is prose guidance for coding
+agents.
 
 ## Known caveat
 

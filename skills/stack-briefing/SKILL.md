@@ -17,6 +17,14 @@ Ruby/Rails, Go), and a database (Postgres/MySQL/SQLite/MongoDB config, or an
 ORM's schema/migration files). If it's not actually this kind of project,
 say so and skip the rest.
 
+If the repo is empty or greenfield, there is no stack to detect and the
+briefing becomes a recommendation instead: name the scaffold to start from —
+an established starter for the intended stack, or the framework's own
+`create-*` tool — rather than assembling a skeleton by hand, which loses the
+wiring conventions, build config, and dev-server setup a scaffold gets right
+for free. State the choice and why, then treat it as the constraint the rest
+of the work builds within.
+
 ## Step 2 — Pin down real versions
 
 - **Frontend**: `package.json` — framework + version, bundler, UI library,

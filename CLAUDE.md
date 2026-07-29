@@ -7,9 +7,10 @@ repository.
 
 A multi-tool agent+skill **plugin** ("Agent-P"): a Full Stack web dev
 department — subagent definitions (`agents/*.md`) in Claude Code's format,
-five skills (`skills/stack-briefing/SKILL.md`,
-`skills/html-css/SKILL.md`, `skills/react/SKILL.md`,
-`skills/tailwind/SKILL.md`, `skills/mysql/SKILL.md`), and adapter files
+six skills (`skills/stack-briefing/SKILL.md`,
+`skills/dev-testing/SKILL.md`, `skills/html-css/SKILL.md`,
+`skills/react/SKILL.md`, `skills/tailwind/SKILL.md`,
+`skills/mysql/SKILL.md`), and adapter files
 (`AGENTS.md`, `.github/copilot-instructions.md`) so the same personas are
 usable from tools without a subagent mechanism. No application code, no
 build step, no test suite — editing this repo means editing the prose/YAML
@@ -108,7 +109,24 @@ There are three descriptions of the same roster, at different granularity:
 
 Adding, renaming, or re-scoping an agent means updating all three — a stale
 `AGENTS.md` entry sends non-Claude tools to a persona that no longer matches
-what `agents/*.md` actually does.
+what `agents/*.md` actually does. The same applies to skills: each one is
+referenced from `AGENTS.md`, `.github/copilot-instructions.md`, `README.md`,
+and the skill count in both `.claude-plugin/*.json` descriptions.
+
+### Verification is a shared contract, not one agent's job
+
+`skills/dev-testing/SKILL.md` defines the probe protocol every runtime check
+in this repo refers to: clear stale port listeners, snapshot the database,
+wait on the service's own ready line, send **one** request or drive **one**
+user-level browser task, then judge on response + log + database delta
+together. The rules that follow from reading three signals instead of one —
+a 2xx with no row change is a FAIL, an uncaught console error is a FAIL —
+are stated in the skill and referenced (not restated in full) by
+`fullstack-tester`, `backend-dev`, `debug-specialist`, and `fullstack-head`.
+Keep it that way: if a verdict rule changes, it changes in the skill, and
+the agents keep pointing at it. `frontend-dev` deliberately has no `Bash` and
+therefore never probes — it emits a browser task for a shell-capable agent
+to run, which is why its report format carries `BROWSER TASK TO PROBE`.
 
 ### Repo/marketplace relationship
 

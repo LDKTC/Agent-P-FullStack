@@ -38,6 +38,11 @@ switching files:
 - CI/CD, Docker, deploy config → `agents/devops-dev.md`.
 - Third-party API/SDK integration → `agents/api-integration-dev.md`.
 - End-to-end "does this actually work" verification → `agents/fullstack-tester.md`.
+- Verifying a change against the running app — start the service, send one
+  request or drive one browser task, read the HTTP response, the server/
+  console log, and the database delta together as one verdict →
+  `skills/dev-testing/SKILL.md`. Applies during implementation, not only at
+  the end.
 - Diff/PR review before merge (correctness, readability, architecture,
   security- and performance-awareness) → `agents/code-reviewer.md`.
 - Exploit-focused security audit (OWASP Top 10, STRIDE from trust
@@ -51,9 +56,12 @@ switching files:
 - Write/update persisted docs (README, architecture notes, API reference) →
   `agents/documentation-architect.md`.
 
-The one rule that applies regardless of which persona fits: **detect the
-real stack and existing conventions from the repo's own files before
-writing code** — never assume a framework version or pattern from memory.
+Two rules apply regardless of which persona fits. **Detect the real stack
+and existing conventions from the repo's own files before writing code** —
+never assume a framework version or pattern from memory. And **run it before
+calling it done** — a 2xx that persisted no row, or a page that rendered
+with an uncaught console error, is a failure that only checking response,
+log, and database delta together will catch.
 
 State handoff contracts explicitly when a change crosses layers (e.g. the
 exact response shape an endpoint returns, or the exact schema a migration

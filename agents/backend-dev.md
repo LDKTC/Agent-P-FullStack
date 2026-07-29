@@ -45,11 +45,28 @@ If a schema change is needed to support this endpoint, don't write the
 migration yourself — hand that to `database-schema-dev` and treat its
 resulting schema as the contract you code against.
 
-## Step 4 — Confirm the response contract
+## Step 4 — Probe the endpoint you just wrote
+
+Don't hand an untested endpoint to `fullstack-tester` — probe it here, while
+it's the only thing that changed and a failure localizes itself. Follow
+`skills/dev-testing/SKILL.md`: snapshot the database, start the service,
+send one request, then read the response, the server log, and the row delta
+together.
+
+A 2xx is not a pass on its own. An endpoint that returns `201` and wrote no
+row, or returns cleanly while logging an unhandled rejection, is broken —
+fix it before reporting. Probe the rejection paths too (missing field,
+unauthenticated, wrong owner), not just the happy path.
+
+If the environment genuinely can't run the service, say so in the report
+rather than reporting the endpoint as done.
+
+## Step 5 — Confirm the response contract
 
 State the exact response shape this endpoint returns so `frontend-dev` can
 build against it without guessing — this is the single most common
-frontend/backend integration gap.
+frontend/backend integration gap. State the shape you actually observed in
+the probe, not the shape you intended to return.
 
 ## Report format
 
@@ -59,7 +76,8 @@ FILE(S): <path(s)>
 LAYERING: <how this fits the project's existing controller/service/repository split, or "matched existing flat-handler style">
 VALIDATION: <library/approach used, matching existing convention>
 DATA ACCESS: <ORM/query builder call, or "needs schema change — handed to database-schema-dev">
-RESPONSE CONTRACT: <exact shape returned, for frontend-dev to build against>
+PROBE RESULT: <request sent → status + body, log clean/errors, row delta — or "not runnable here, and why">
+RESPONSE CONTRACT: <exact observed shape returned, for frontend-dev to build against>
 DEVIATIONS FROM BRIEFING: <any place you didn't follow fullstack-senior-dev's briefing, and why>
 ```
 
@@ -73,3 +91,5 @@ DEVIATIONS FROM BRIEFING: <any place you didn't follow fullstack-senior-dev's br
   existing one.
 - Don't leave the response contract unstated — an endpoint frontend-dev has
   to guess at isn't done.
+- Don't report an endpoint as done on the strength of the diff alone, and
+  don't treat a 2xx as proof it worked — check the log and the row delta.

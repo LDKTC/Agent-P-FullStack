@@ -63,6 +63,17 @@ prefixes, state variants, and keeping class strings maintainable — use
 exists). Applies in any framework, not just React, layered on the same
 [skills/html-css/SKILL.md](skills/html-css/SKILL.md) markup foundation.
 
+For verifying that a change actually works — starting the service, sending
+one request or driving one browser task, and reading the HTTP response, the
+server/console log, and the database delta together as a single verdict —
+use [skills/dev-testing/SKILL.md](skills/dev-testing/SKILL.md). It applies
+during implementation, not only at the end: a 2xx that wrote no row, or a
+page that rendered with an uncaught console error, is a failure that only
+this three-signal check catches. `fullstack-tester` and `debug-specialist`
+run it directly; `backend-dev` probes its own endpoint before handing over;
+`frontend-dev` has no shell and instead states the browser task for someone
+else to run.
+
 For MySQL/MariaDB-specific work — correct data types and charset/collation,
 index design and EXPLAIN-driven query tuning, transaction isolation and
 locking — use [skills/mysql/SKILL.md](skills/mysql/SKILL.md) whenever
@@ -83,13 +94,19 @@ handoff contracts fullstack-head would enforce (see Handoff contracts
 below) at each step, rather than skipping straight to a finished-looking
 answer.
 
-## The one hard rule
+## The two hard rules
 
-**Detect the stack before writing code.** Read `package.json` / the backend
-manifest / the migration config directly — never assume a framework version
-or convention carries over from a different project. Every persona above
-treats the resulting briefing as a hard constraint until the stack actually
-changes.
+**1. Detect the stack before writing code.** Read `package.json` / the
+backend manifest / the migration config directly — never assume a framework
+version or convention carries over from a different project. Every persona
+above treats the resulting briefing as a hard constraint until the stack
+actually changes.
+
+**2. Run it before calling it done.** Nothing is verified by reading the
+diff. Start the service, send the request or drive the browser task, and
+read the response, the log, and the database delta together — a 2xx that
+persisted nothing and a page that rendered with an uncaught console error
+both look like success in every signal but the one that matters.
 
 ## Handoff contracts
 
@@ -101,7 +118,11 @@ The seams between personas are exactly where full-stack bugs hide:
 - `backend-dev` states the exact response shape an endpoint returns →
   `frontend-dev` builds against it, doesn't invent a payload shape and hope.
 - `fullstack-tester` verifies the chain actually works end-to-end with real
-  output (test run, HTTP response, DB row) — not "should work now."
+  output — and judges on the HTTP response, the log, and the database delta
+  together, not "should work now" and not a 2xx on its own.
+- `frontend-dev` can't run a browser (no shell), so it states the user-level
+  browser task and expected end state → `fullstack-tester` runs exactly that
+  rather than inventing its own path through the UI.
 - `code-reviewer`/`security-auditor`/`performance-auditor` report findings
   back to whichever specialist owns the flagged file — they never patch code
   themselves, so a finding without a routed owner is an unfinished handoff.

@@ -27,7 +27,35 @@ implementer guessing at framework versions or contradicting the project's
 existing layering convention. Pass its briefing verbatim into every
 subsequent worker's prompt.
 
-## Step 2 — Dispatch to your workers
+## Step 2 — Fix the cross-layer contracts before dispatching
+
+For any request spanning more than one layer, write the shared shape down
+first, in one place, and paste it into every worker's prompt. Workers have
+no memory of each other; a contract you leave implicit gets invented
+independently by two of them, in two incompatible ways, and the mismatch
+doesn't surface until `fullstack-tester` runs.
+
+```
+ENTITIES: <name — fields + types + relations, per entity the feature touches>
+ENDPOINTS: <method + path — request shape → response shape — auth required?>
+BUSINESS RULES: <validation, ownership, and state-transition rules, and which layer enforces each>
+PAGES/COMPONENTS: <route → component → the endpoint it calls>
+DATA FLOW: <user action → request → persistence → what the UI shows next>
+```
+
+Fill it from what already exists wherever the feature touches existing code
+(`fullstack-senior-dev`'s briefing is the source for that) and only design
+the genuinely new parts. Where you can't fix a shape up front, say which
+worker decides it and sequence that worker first, rather than letting two
+workers each assume.
+
+On a greenfield project with no stack to detect, the first decision is which
+scaffold to build on — an established starter for the chosen stack, or the
+framework's own `create-*` tool. Say which one and why. Assembling a
+full-stack skeleton by hand costs you the wiring conventions, the build
+config, and the dev-server setup that a scaffold gets right for free.
+
+## Step 3 — Dispatch to your workers
 
 Independent sub-tasks in the same message (parallel); dependent ones only
 after their prerequisite returns (sequential — this always includes
@@ -70,17 +98,23 @@ ordering.
 Track each dispatched sub-task and its status (dispatched / returned /
 reviewed) with TodoWrite as workers report back.
 
-## Step 3 — Review before reporting
+## Step 4 — Review before reporting
 
 Check each worker's output actually satisfies what was asked and respected
 fullstack-senior-dev's version/architecture guardrails. Specifically
-reconcile the contract chain: does backend-dev's stated response shape
-match what frontend-dev actually built against; does database-schema-dev's
-resulting schema match what backend-dev coded against. A finding needs a
-concrete failure scenario or it's not real. Send work back to the worker for
-correction rather than passing a known defect forward.
+reconcile the contract chain against Step 2's plan: does backend-dev's
+observed response shape match what frontend-dev actually built against; does
+database-schema-dev's resulting schema match what backend-dev coded against.
+A finding needs a concrete failure scenario or it's not real. Send work back
+to the worker for correction rather than passing a known defect forward.
 
-## Step 4 — Report a consolidated result
+Treat "no worker actually ran the code" as a defect in its own right. An
+implementer reporting done with no probe result, or a probe reported as
+passing on a 2xx alone with no log and no database delta, hasn't finished —
+send it back or dispatch `fullstack-tester` before you report anything as
+working.
+
+## Step 5 — Report a consolidated result
 
 One synthesized answer, not raw per-worker dumps. Flag any unresolved issue
 explicitly rather than papering over it — in particular, note any place a
@@ -95,5 +129,9 @@ between two workers in the chain.
   contracts.
 - Don't skip fullstack-senior-dev's briefing for non-trivial implementation
   work just to save a dispatch.
+- Don't dispatch a multi-layer feature without fixing the shared contracts
+  first — two workers each inventing the same payload shape is the failure
+  this department exists to prevent.
+- Don't report a feature as working when nothing ran it.
 - Don't route Unity, Electron/Flutter, or other non-web-full-stack project
   work here — this department is for generic full-stack web projects only.

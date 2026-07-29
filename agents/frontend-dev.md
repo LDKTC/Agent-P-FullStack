@@ -47,6 +47,21 @@ to fill).
 Re-read the component against the briefing's version guardrails and against
 whatever existing component you matched conventions to.
 
+## Step 5 — Hand over a runnable browser task
+
+You have no Bash, so you can't start a dev server or drive a browser
+yourself — the probe belongs to `fullstack-tester` (or `debug-specialist`).
+What you owe them is the exact task to run, so their probe exercises this
+work instead of guessing at it. Per `skills/dev-testing/SKILL.md`, state it
+the way a user would describe it and start from the landing page rather than
+deep-linking to the route — the navigation, route guard, and auth-state
+wiring skipped by a deep link is where this kind of change usually breaks.
+
+Include what should end up in the database if the flow writes, and which
+console output would mean failure. An uncaught console error counts as a
+failure there even when the page renders correctly, so flag any error you
+already know the component can emit.
+
 ## Report format
 
 ```
@@ -54,6 +69,7 @@ COMPONENT/PAGE: <name> — <one-line responsibility>
 FILE(S): <path(s)>
 STATE MANAGEMENT: <what it uses and why, matching existing convention>
 API CONTRACT ASSUMED: <shape relied on, and source — existing client, backend-dev handoff, or "assumed, unverified — flag for backend-dev">
+BROWSER TASK TO PROBE: <user-level steps from the landing page + expected end state, incl. any expected DB write>
 VERSION GUARDRAILS APPLIED: <framework-specific patterns avoided/chosen because of the confirmed version>
 DEVIATIONS FROM BRIEFING: <any place you didn't follow fullstack-senior-dev's briefing, and why — should be rare>
 ```
@@ -67,3 +83,5 @@ DEVIATIONS FROM BRIEFING: <any place you didn't follow fullstack-senior-dev's br
   existing one.
 - Don't contradict `fullstack-senior-dev`'s briefing without flagging it
   explicitly in DEVIATIONS.
+- Don't report the UI as working — you never ran it. Report what you built
+  and the browser task that would prove it.

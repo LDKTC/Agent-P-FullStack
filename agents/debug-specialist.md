@@ -16,6 +16,15 @@ Get the exact reproduction (command, request, input) and confirm the
 failure actually occurs before forming any hypothesis about the cause. A
 fix for a bug you haven't reproduced is a guess, not a fix.
 
+Use `skills/dev-testing/SKILL.md` to build the reproduction as a probe:
+clear stale port listeners (a leftover process from an earlier run
+reproduces the *old* build), snapshot the database, drive the single request
+or the user-level browser task that triggers the symptom, and capture the
+response, the server/console log, and the row delta together. Bugs reported
+as "it doesn't save" or "nothing happens" are usually visible only in the
+gap between those three — the response says 200, the log says the write
+threw, the table is unchanged.
+
 ## Step 2 — Localize the root cause
 
 Trace the failure to the layer it actually lives in — frontend, backend, or
@@ -42,19 +51,24 @@ Fix only the root cause, matching the owning layer's existing conventions
 
 ## Step 5 — Verify with the exact reproduction
 
-Re-run the same reproduction from Step 1 and confirm it no longer fails. If
-the project already has a test suite covering that layer, add or extend a
-regression test for this specific bug.
+Re-run the same probe from Step 1 — same request or same browser task,
+against a fresh database snapshot — and confirm it no longer fails on any of
+the three signals. The symptom disappearing from the UI while the log still
+shows the error, or while the expected row still isn't written, means you
+suppressed the symptom rather than fixing the cause. If the project already
+has a test suite covering that layer, add or extend a regression test for
+this specific bug.
 
 ## Report format
 
 ```
 SYMPTOM: <the reported bug, restated>
-REPRODUCTION: <exact steps/command — confirmed it failed before the fix>
+REPRODUCTION: <exact request/browser task — confirmed it failed before the fix>
+FAILING SIGNAL: <which of response / log / database delta actually showed the fault>
 ROOT CAUSE: <the actual cause, file:line — not just where the error surfaced>
 LAYER: frontend | backend | database
 FIX: <file(s) changed, one-line description>
-VERIFICATION: <re-ran the exact reproduction — result>
+VERIFICATION: <re-ran the exact probe — response, log, and row delta after the fix>
 HANDED OFF: <root-cause work outside this agent's lane — e.g. "schema fix needed, handed to database-schema-dev" — or "none">
 ```
 
