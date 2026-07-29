@@ -85,14 +85,73 @@ one decision per handler, order as a contract, explicit termination, and no
 silent fall-through. `backend-dev` and `frontend-dev` apply it while
 implementing; `code-reviewer` reviews against it.
 
-For MySQL/MariaDB-specific work — correct data types and charset/collation,
-index design and EXPLAIN-driven query tuning, transaction isolation and
-locking — use [skills/mysql/SKILL.md](skills/mysql/SKILL.md) whenever
-`package.json` lists `mysql2`/`mysql`, an ORM dialect/provider is set to
-`mysql` (Prisma, Sequelize, TypeORM), a docker-compose service runs a
-mysql/mariadb image, or a `mysql://` connection string is present. This is
-`database-schema-dev`'s and `backend-dev`'s MySQL-specific expertise layer,
-not a replacement for either — both stay engine-agnostic on their own.
+For TypeScript-specific work — strict-mode settings, the rule that types are
+erased so every boundary (request body, `process.env`, `JSON.parse`,
+third-party response) needs schema validation with the type derived from it,
+disciplined `any`/`as`/`!` use, and discriminated unions over optional-flag
+soup — use [skills/typescript/SKILL.md](skills/typescript/SKILL.md) whenever
+a `tsconfig.json` exists. It cuts across every layer rather than sitting
+under one persona.
+
+For Node.js runtime work — what blocks the single-threaded event loop, async
+correctness and floating promises, streams and backpressure, ESM/CJS
+interop, env-validated config, graceful SIGTERM shutdown, and Node-specific
+security (`child_process`, path traversal) — use
+[skills/nodejs/SKILL.md](skills/nodejs/SKILL.md) whenever the server runtime
+is Node. This is `backend-dev`'s runtime layer, not a replacement for its
+route/validation/business-logic work.
+
+## Database and platform skills
+
+Each of these is `database-schema-dev`'s and `backend-dev`'s
+engine-specific expertise layer — neither agent stops being
+engine-agnostic; these are what they draw on once the engine is known.
+They also stack, so read the base skill with the one on top of it:
+
+| Skill | Use when | Layered on |
+|---|---|---|
+| [skills/mysql/SKILL.md](skills/mysql/SKILL.md) — data types and charset/collation, index design, EXPLAIN-driven tuning, transaction isolation and gap locks | `mysql2`/`mysql` in package.json, an ORM dialect/provider of `mysql`, a mysql/mariadb compose image, or a `mysql://` URL | — |
+| [skills/postgres/SKILL.md](skills/postgres/SKILL.md) — `timestamptz`/`numeric`/`jsonb` typing, btree/GIN/partial/expression indexes, `EXPLAIN (ANALYZE, BUFFERS)`, MVCC and vacuum, PgBouncer transaction-mode limits, lock-safe migrations | `pg`/`postgres`/`@neondatabase/serverless`, an ORM provider of `postgresql`, a postgres compose image, or a `postgres://` URL | — |
+| [skills/sqlite/SKILL.md](skills/sqlite/SKILL.md) — dynamic typing and `STRICT` tables, no native boolean/date, foreign keys off per connection, single-writer + WAL + `busy_timeout`, `BEGIN IMMEDIATE`, `EXPLAIN QUERY PLAN`, the 12-step table recreate | `better-sqlite3`/`sqlite3`/`node:sqlite`/`expo-sqlite`, an ORM provider of `sqlite`, or a `.db`/`file:` database | — |
+| [skills/turso/SKILL.md](skills/turso/SKILL.md) — remote vs embedded-replica vs local connection modes, replica staleness, no interactive transactions over HTTP, per-tenant database patterns, token scoping | `@libsql/client`, a `libsql://` URL, or `TURSO_DATABASE_URL` | `sqlite` |
+| [skills/supabase/SKILL.md](skills/supabase/SKILL.md) — the anon vs `service_role` key boundary, RLS as the authorization layer (`USING` vs `WITH CHECK`), `getUser()` over `getSession()`, `app_metadata` not `user_metadata` for roles, CLI migrations over dashboard edits, Edge Functions/Storage/Realtime | `@supabase/supabase-js`/`@supabase/ssr`, a `supabase/` directory, or `SUPABASE_URL` | `postgres` |
+| [skills/firebase/SKILL.md](skills/firebase/SKILL.md) — client config is public but the Admin SDK bypasses every rule, Security Rules are not filters, Firestore modeling for the read shape and hot-document limits, per-read cost, idempotent Cloud Functions, `verifyIdToken` and custom claims, the Emulator Suite | `firebase`/`firebase-admin`, `firebase.json`, `firestore.rules`, or `google-services.json` | — |
+
+## Desktop and mobile skills
+
+For Electron desktop work — the main/renderer/preload process model as a
+trust boundary, the `contextIsolation`/`nodeIntegration`/`sandbox` baseline,
+a narrow `contextBridge` surface with validated `ipcMain.handle` arguments,
+`shell.openExternal` allowlisting, and packaging/signing/auto-update — use
+[skills/electron/SKILL.md](skills/electron/SKILL.md) whenever `package.json`
+lists `electron`/`electron-builder`/`electron-forge`. The renderer is still
+a web UI, so `frontend-dev`, `skills/html-css/SKILL.md`, and
+`skills/react/SKILL.md` still apply inside it, and the main process is Node,
+so `skills/nodejs/SKILL.md` applies there.
+
+For Flutter/Dart app work — a pure and cheap `build()`, `const` and rebuild
+scope, disposal and the `mounted` check after every `await`, the
+constraints-down/sizes-up layout model, builder-based lists, and
+per-platform assets/permissions — use
+[skills/flutter/SKILL.md](skills/flutter/SKILL.md) whenever `pubspec.yaml`
+exists. Flutter has no DOM and no CSS, so `skills/html-css/SKILL.md`,
+`skills/react/SKILL.md`, and `skills/tailwind/SKILL.md` deliberately do
+**not** carry over — `ui-ux-researcher`'s recommendations and
+`backend-dev`'s API contracts still do.
+
+## Auth
+
+For "Sign in with Google" and OAuth 2.0/OIDC generally — picking
+authorization code + PKCE over the deprecated implicit flow, never shipping
+a client secret in a public client, the ID token vs access token
+distinction, full server-side ID token verification (signature, `aud`,
+`iss`, `exp`, nonce, `email_verified`, `sub` as the stable key),
+`state`/redirect-URI safety, minimal and incremental scopes, refresh token
+handling, and the account-linking hazard on unverified email — use
+[skills/google-auth/SKILL.md](skills/google-auth/SKILL.md). It's the
+protocol layer under `api-integration-dev`'s SDK wiring; findings on the
+trust boundary still route to `security-auditor`. This applies to Google
+sign-in configured through Supabase Auth or Firebase Auth too.
 
 ## More than one row applies
 
