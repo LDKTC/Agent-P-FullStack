@@ -7,10 +7,10 @@ repository.
 
 A multi-tool agent+skill **plugin** ("Agent-P"): a Full Stack web dev
 department — subagent definitions (`agents/*.md`) in Claude Code's format,
-six skills (`skills/stack-briefing/SKILL.md`,
-`skills/dev-testing/SKILL.md`, `skills/html-css/SKILL.md`,
-`skills/react/SKILL.md`, `skills/tailwind/SKILL.md`,
-`skills/mysql/SKILL.md`), and adapter files
+seven skills (`skills/stack-briefing/SKILL.md`,
+`skills/dev-testing/SKILL.md`, `skills/dry-and-cor/SKILL.md`,
+`skills/html-css/SKILL.md`, `skills/react/SKILL.md`,
+`skills/tailwind/SKILL.md`, `skills/mysql/SKILL.md`), and adapter files
 (`AGENTS.md`, `.github/copilot-instructions.md`) so the same personas are
 usable from tools without a subagent mechanism. No application code, no
 build step, no test suite — editing this repo means editing the prose/YAML
@@ -127,6 +127,19 @@ Keep it that way: if a verdict rule changes, it changes in the skill, and
 the agents keep pointing at it. `frontend-dev` deliberately has no `Bash` and
 therefore never probes — it emits a browser task for a shell-capable agent
 to run, which is why its report format carries `BROWSER TASK TO PROBE`.
+
+### Structural rules live in one skill too
+
+`skills/dry-and-cor/SKILL.md` is the same kind of shared reference for DRY
+and Chain of Responsibility. `backend-dev` and `frontend-dev` apply it while
+implementing, `code-reviewer` reviews against it as one of its six
+dimensions — all three point at it rather than restating the rules, so a
+judgment call changes in one file. Two positions in it are deliberate and
+easy to "fix" wrongly: server-side validation is never reported as redundant
+with client-side validation (the client isn't a trust boundary), and code
+that merely looks alike but changes for different reasons is not
+duplication. Both exist to stop an over-eager DRY pass from creating a
+security hole or a bad coupling.
 
 ### Repo/marketplace relationship
 

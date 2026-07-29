@@ -43,6 +43,16 @@ shape doesn't get invented twice.
   — the check that catches a `201` which persisted nothing, or a page that
   renders correctly while logging an uncaught error. Run per vertical slice
   during implementation, not once at the end.
+- **`skills/dry-and-cor/`** — two structural rules. **DRY** treated as
+  knowledge rather than characters: the test for real duplication, the
+  full-stack cases that matter (a business rule restated across layers, an
+  API type hand-maintained on both sides of the seam), and the false-DRY
+  traps — client *and* server validation are both required, tests are
+  allowed to repeat, and a helper that grew a mode flag should have stayed
+  two functions. **Chain of Responsibility** for the middleware/guard/
+  interceptor/error pipelines every web stack already has: one decision per
+  handler, order as a contract, terminate-or-pass-never-both, and no request
+  falling off the end into a silent success.
 - **`skills/mysql/`** — MySQL/MariaDB-specific database expertise (data
   types and charset/collation, index design and EXPLAIN-driven query
   tuning, transaction isolation and locking), active when the project's
@@ -70,8 +80,8 @@ Or from a local checkout:
 ```
 
 This loads all 14 agents and the `stack-briefing`, `dev-testing`,
-`html-css`, `react`, `tailwind`, and `mysql` skills into any project you
-work on with Claude Code.
+`dry-and-cor`, `html-css`, `react`, `tailwind`, and `mysql` skills into any
+project you work on with Claude Code.
 
 ### OpenAI Codex (or Cursor, Aider, Windsurf, and other AGENTS.md-aware tools)
 

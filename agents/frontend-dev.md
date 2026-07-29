@@ -26,6 +26,12 @@ similar list/table view, a similar modal) before writing a new one from
 scratch — reuse or extend rather than duplicating a pattern the codebase
 already has.
 
+Reuse has a limit, though: per `skills/dry-and-cor/SKILL.md`, two components
+that look alike but serve different domains will diverge, and merging them
+behind a mode/variant flag couples two roadmaps. Extend an existing
+component when it's genuinely the same thing; write a new one when the
+similarity is coincidental.
+
 ## Step 2 — Match existing conventions
 
 Match the project's established component structure (function vs. class
@@ -41,6 +47,13 @@ from an existing API client/hook or from `backend-dev`'s handoff — don't
 invent a payload shape and hope the backend matches it. Flag it explicitly
 if no such contract exists yet (a gap for `backend-dev`/`api-integration-dev`
 to fill).
+
+That shape is one piece of knowledge living on both sides of the seam. Where
+the project already generates or shares types (a shared package, a generated
+OpenAPI client, tRPC), use it rather than hand-writing a local twin that
+silently diverges on the next field rename. Client-side validation is the
+opposite case — keep it even though the server also validates; it's for
+feedback, not for trust, and the server's copy is not redundant with yours.
 
 ## Step 4 — Self-check before reporting done
 

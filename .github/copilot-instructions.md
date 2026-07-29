@@ -35,6 +35,13 @@ switching files:
   `mysql2`/`mysql`, an ORM dialect/provider is set to `mysql`, a
   docker-compose service runs a mysql/mariadb image, or a `mysql://`
   connection string is present.
+- Deciding whether to extract a shared abstraction, or adding to/reordering
+  a middleware, guard, interceptor, or error-handler chain →
+  `skills/dry-and-cor/SKILL.md`. DRY is about knowledge, not characters
+  (blocks that change for different reasons aren't duplication, and
+  server-side validation is never redundant with the client's); CoR is one
+  decision per handler, order as a contract, explicit termination, no silent
+  fall-through.
 - CI/CD, Docker, deploy config → `agents/devops-dev.md`.
 - Third-party API/SDK integration → `agents/api-integration-dev.md`.
 - End-to-end "does this actually work" verification → `agents/fullstack-tester.md`.

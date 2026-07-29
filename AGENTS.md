@@ -74,6 +74,17 @@ run it directly; `backend-dev` probes its own endpoint before handing over;
 `frontend-dev` has no shell and instead states the browser task for someone
 else to run.
 
+For duplication and handler-chain judgment —
+[skills/dry-and-cor/SKILL.md](skills/dry-and-cor/SKILL.md) — use it when a
+rule is about to exist in two layers, when deciding whether to extract a
+shared abstraction, or when adding to/reordering a middleware, guard,
+interceptor, or error-handler chain. DRY here is about knowledge rather than
+characters (two blocks that change for different reasons aren't duplication,
+and server-side validation is never redundant with the client's); CoR covers
+one decision per handler, order as a contract, explicit termination, and no
+silent fall-through. `backend-dev` and `frontend-dev` apply it while
+implementing; `code-reviewer` reviews against it.
+
 For MySQL/MariaDB-specific work — correct data types and charset/collation,
 index design and EXPLAIN-driven query tuning, transaction isolation and
 locking — use [skills/mysql/SKILL.md](skills/mysql/SKILL.md) whenever
@@ -123,6 +134,12 @@ The seams between personas are exactly where full-stack bugs hide:
 - `frontend-dev` can't run a browser (no shell), so it states the user-level
   browser task and expected end state → `fullstack-tester` runs exactly that
   rather than inventing its own path through the UI.
+- A business rule enforced in more than one layer names its authoritative
+  source (the server, essentially always) → the other layers derive from or
+  defer to it instead of each keeping a copy that drifts.
+- `backend-dev` states the middleware/guard order a route sits behind →
+  `code-reviewer` and `security-auditor` review that order, since a guard
+  registered after the handler it protects reads as working code.
 - `code-reviewer`/`security-auditor`/`performance-auditor` report findings
   back to whichever specialist owns the flagged file — they never patch code
   themselves, so a finding without a routed owner is an unfinished handoff.
