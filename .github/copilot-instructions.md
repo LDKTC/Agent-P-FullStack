@@ -9,6 +9,8 @@ switching files:
 - Detecting the stack/versions/conventions of an unfamiliar repo before
   writing anything → follow `agents/fullstack-senior-dev.md` (or the
   lighter-weight `skills/stack-briefing/SKILL.md`).
+- Coordinating multi-lane or non-subagent requests → follow
+  `skills/agent-flow/SKILL.md` first.
 - Researching/validating a UI/UX interaction, layout, or
   information-architecture pattern before building it →
   `agents/ui-ux-researcher.md` — hands the recommendation to `frontend-dev`

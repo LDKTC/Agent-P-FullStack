@@ -7,7 +7,7 @@ repository.
 
 A multi-tool agent+skill **plugin** ("Agent-P"): a Full Stack web dev
 department — subagent definitions (`agents/*.md`) in Claude Code's format,
-seventeen skills under `skills/` (three cross-cutting:
+eighteen skills under `skills/` (four cross-cutting: `agent-flow`,
 `stack-briefing`, `dev-testing`, `dry-and-cor`; and fourteen
 technology-specific: `html-css`, `react`, `tailwind`, `typescript`,
 `nodejs`, `electron`, `flutter`, `mysql`, `postgres`, `sqlite`, `supabase`,

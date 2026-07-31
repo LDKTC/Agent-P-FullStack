@@ -1,7 +1,7 @@
 {
   "name": "agent-p-fullstack",
   "version": "1.5.0",
-  "description": "Agent-P: a Full Stack web dev department — 14 subagents (senior architect, UI/UX researcher, frontend, backend, database schema, devops, third-party integration, e2e tester, code reviewer, security auditor, performance auditor, debug specialist, documentation architect, and a department head that routes between them) plus seventeen skills (stack detection, development-oriented testing, DRY & Chain of Responsibility, HTML/CSS craft, React, Tailwind CSS, TypeScript, Node.js, Electron, Flutter, MySQL, PostgreSQL, SQLite, Supabase, Turso/libSQL, Firebase, and Google Sign-In/OAuth).",
+  "description": "Agent-P: a Full Stack web dev department — 14 subagents (senior architect, UI/UX researcher, frontend, backend, database schema, devops, third-party integration, e2e tester, code reviewer, security auditor, performance auditor, debug specialist, documentation architect, and a department head that routes between them) plus eighteen skills (agent-flow, stack detection, development-oriented testing, DRY & Chain of Responsibility, HTML/CSS craft, React, Tailwind CSS, TypeScript, Node.js, Electron, Flutter, MySQL, PostgreSQL, SQLite, Supabase, Turso/libSQL, Firebase, and Google Sign-In/OAuth).",
   "author": {
     "name": "LDKTC",
     "email": "thanapatsinghanart@gmail.com"

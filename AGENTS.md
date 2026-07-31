@@ -37,8 +37,9 @@ getting invented twice by two different layers.
 
 Lighter-weight alternative to dispatching `fullstack-senior-dev` as a
 subagent: [skills/stack-briefing/SKILL.md](skills/stack-briefing/SKILL.md)
-walks the same detection routine inline, for tools with no subagent
-mechanism.
+walks the same detection routine inline, and for multi-lane or
+non-subagent workflows use [skills/agent-flow/SKILL.md](skills/agent-flow/SKILL.md)
+first to coordinate the request.
 
 For raw HTML/CSS authoring or review with no framework in front of it (a
 static page, an email template, a landing page) — or auditing the semantic

@@ -151,7 +151,7 @@ Or from a local checkout:
 /plugin install agent-p-fullstack@agent-p-fullstack
 ```
 
-This loads all 14 agents and the 17 skills — `stack-briefing`,
+This loads all 14 agents and the 18 skills — `agent-flow`, `stack-briefing`,
 `dev-testing`, `dry-and-cor`, `html-css`, `react`, `tailwind`,
 `typescript`, `nodejs`, `electron`, `flutter`, `mysql`, `postgres`,
 `sqlite`, `supabase`, `turso`, `firebase`, and `google-auth` — into any
