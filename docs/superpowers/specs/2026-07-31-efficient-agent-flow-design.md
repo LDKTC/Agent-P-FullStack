@@ -72,6 +72,52 @@ for example, receives no database or deployment context.
   with references to their canonical skills where this does not remove a
   necessary permission or role boundary.
 
+### Mobbin-informed UI/UX research
+
+Extend the UI/UX research path with Mobbin as an optional visual-reference
+source for real app, web-app, and public-site flows. Mobbin supports searching
+screens, UI elements, text, and full flows; its official documentation also
+offers a remote MCP integration for coding agents. Use it only when available
+and authorized in the host environment. Do not add credentials, require a
+paid account, bypass a login/paywall, or install an external integration as
+part of this plugin.
+
+The researcher will use the narrowest query that describes the user's
+problem, platform, and flow (for example, `web checkout address validation`),
+then examine no more than five representative examples. It reports the
+underlying interaction pattern in its own words, not screenshots, copied
+visual details, or a named product's brand expression. Mobbin evidence informs
+the visual/interaction recommendation; it never by itself makes a pattern
+"proven".
+
+Keep the existing quality bar:
+
+1. confirm convergence across at least three independent products;
+2. corroborate the decision with an appropriate authoritative UX or platform
+   guideline;
+3. reject inaccessible, deceptive, or brand-specific treatments even when
+   they are common; and
+4. give `frontend-dev` a compact, generic implementation brief rather than
+   raw Mobbin images or a screen-by-screen reproduction request.
+
+The revised UI/UX report adds a `MOBBIN REFERENCE` line containing the access
+method (`MCP`, browser, or unavailable), a sanitized query, number of examples
+reviewed, named pattern convergence, and source URLs/identifiers where the
+user may access them. It explicitly states when Mobbin was unavailable so
+the result never implies visual research that did not occur. `fullstack-head`
+requests this evidence only for a meaningful interaction, layout, or flow
+decision; it is not an automatic step for routine component implementation.
+
+Mobbin sources:
+
+- [Mobbin documentation overview](https://docs.mobbin.com/overview) confirms
+  it is a UI/UX reference library and documents the remote MCP/API access
+  modes and availability.
+- [Mobbin MCP](https://mobbin.com/mcp) demonstrates searches over real
+  product screens and flows for coding-agent design research.
+- [Mobbin changelog](https://mobbin.com/changelog) documents searchable
+  apps, screens, UI elements, flows, interaction views, and site sections.
+
 ### Codex package and synchronization
 
 Create the repository-local Codex marketplace package described by the
@@ -94,6 +140,9 @@ modify the Claude plugin manifest or its existing marketplace entry.
 ## Changes in Scope
 
 - Add the canonical `agent-flow` skill and its Codex-packaged copy.
+- Add the optional, evidence-bounded Mobbin research protocol to the UI/UX
+  researcher, the department-head dispatch criteria, and the frontend handoff
+  contract.
 - Tighten the department-head and cross-platform adapters around the tiered
   protocol.
 - Remove duplicated global instructions where the canonical skill already
